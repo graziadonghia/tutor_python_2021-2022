@@ -1,0 +1,6 @@
+Nel file lateralus.txt è contenuta la lista delle tracce dell’album Lateralus, pubblicato nel 2001 dai TOOL.
+In ogni riga del file è presente del testo, il titolo della canzone, e una serie di __ in modo da rendere tutte le righe lunghe uguali.
+Scrivere un programma python che, dato il numero della traccia (inserito dall'utente), 
+stampi a video il titolo della canzone.
+Versione scarsa: utilizzare dizionari e liste
+Versione pro: utilizzare una stringa per salvare il contenuto del file

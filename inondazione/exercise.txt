@@ -1,0 +1,5 @@
+Abbiamo una matrice di interi, ogni intero rappresenta i metri sul livello del mare. Lo zero invece rappresenta l’acqua. 
+Ci viene dato un numero w_incr che rappresenta l’incremento dell’acqua (cioè il livello di cui l’acqua sale a seguito dell’inondazione). 
+Quindi le terre che risulteranno sommerse (se m é la matrice i valori m[i][j]<w_incr) diventano acqua , quelle che invece sono maggiori del livello di cui l’acqua sale, vengono decrementate di w_incr (m[i][j]-=w_incr). 
+Capisco che non abbia scritto benissimo il testo, tra l’altro c’è anche una complicazione legata al fatto che ci siano degli scogli… se vuoi posso provare a mandare una foto di come dovrebbe essere la matrice prima e dopo l’inondazione. 
+Non chiedo di svolgere tutto l’esercizio perché potrebbe portare via troppo tempo, vorrei capire più che altro se come vorrei svolgerlo sia corretto.
