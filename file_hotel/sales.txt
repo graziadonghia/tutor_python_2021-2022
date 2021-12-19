@@ -1,0 +1,6 @@
+pippo;cena;12.50;12-12-2021
+pluto;cena;10.00;10-05-2021
+paperino;conferenza;5.45;02-02-2021
+topolino;alloggio;34.50;19-08-2020
+topolino;cena;25.00;19-08-2020
+mariano;alloggio;100.00;06-06-2006
