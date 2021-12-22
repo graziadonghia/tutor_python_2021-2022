@@ -5,3 +5,9 @@ così via), l’importo pagato e la data dell’evento. Scrivete un programma ch
 tale file di testo e visualizzi l’importo totale relativo a ciascun tipo di servizio,
 segnalando un errore se il file non esiste oppure se il suo formato non è corretto
 (verificando cioè che ci siano 4 campi per riga e che il prezzo sia float)
+
+
+input: sales.txt
+output: cena 47.50 
+        alloggio 134.50
+        conferenza 5.45
