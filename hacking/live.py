@@ -1,48 +1,68 @@
-PRODUCTS_FILENAME = "prodotti.txt"
-SALES_FILENAME = "acquisti.txt"
+FILE_PRODOTTI = "prodotti.txt"
+FILE_ACQUISTI = "acquisti.txt"
 
-
-def saveProducts(filename):
-    products = {}
-    f = open(filename, "r")
+def salvaProdotti(filename):
+    prodIDs = [] #ID dei prodotti
+    vendorIDs = [] #ID dei rivenditori ufficiali
+    try:
+        f = open(filename, "r")
+    except:
+        print("Errore nell'apertura del file")
+    
     for line in f:
-        lineList = line.split(" ")
-        prodCode = lineList[0]
-        vendorCode = lineList[1].replace("\r\n", "")
-        products[prodCode] = vendorCode
+        lineList = line.replace("\n", "").split(" ")
+        #lineList[0] = productID
+        #lineList[1] = vendorID
+        prodIDs.append(lineList[0]) #key
+        vendorIDs.append(lineList[1])
     f.close()
 
-    return products
+    #costruisco dizionario
+    prodAndVend = dict({k:v for k,v in zip(prodIDs, vendorIDs)})
+    
+    return prodAndVend
 
+def controlloAcquisti(filename, prodAndVend):
+    prodIDs = [] #key
+    vendIDs = [] #value
+    sospetti = []
 
-def checkSales(filename, products):
-    sales = {}
-    suspects = []
-    f = open(filename, "r")
+    try:
+        f = open(filename, "r")
+    except:
+        print("Errore nell'apertura del file")
+    
     for line in f:
-        lineList = line.split(" ")
-        prodCode = lineList[0]
-        vendorCode = lineList[1].replace("\r\n", "")
+        lineList = line.replace("\n", "").split(" ")
+        #lineList[0] = prod ID
+        #lineList[1] = vendor ID
+        prod = lineList[0]
+        vend = lineList[1]
+        prodIDs.append(prod)
+        vendIDs.append(vend)
 
-        if prodCode in sales.keys():
-            sales[prodCode].append(vendorCode)
-        else:
-            sales[prodCode] = vendorCode.split()
-        if vendorCode != products[prodCode]:
-            #suspect
-            suspects.append(prodCode)
-    f.close()
+        if vend != prodAndVend[prod]:
+            #sospetto trovato
+            sospetti.append(prod)
+        f.close()
+    
+    #costruisco dizionario degli acquisti
+    acquisti = dict({k:v for k,v in zip(prodIDs, vendIDs)})
 
-    return sales, suspects
+    return acquisti, sospetti
 
 def main():
-    products = saveProducts(PRODUCTS_FILENAME)
-    sales, suspects = checkSales(SALES_FILENAME, products)
+    prodAndVend = salvaProdotti(FILE_PRODOTTI)
+    print(prodAndVend)
+
+    acquisti, sospetti = controlloAcquisti(FILE_ACQUISTI, prodAndVend)
+
     print("Elenco transazioni sospette")
-    for prod in suspects:
-        print("Codice prodotto: " + prod)
-        print("Rivenditore ufficiale: " + products[prod])
-        print("Lista rivenditori: " + str(sales[prod]))
-        print("\n")
+
+    for s in sospetti: #s è una chiave 
+       print("Codice prodotto: "+s) 
+       print("Rivenditore ufficiale: "+prodAndVend[s])
+       print("Lista rivenditori: "+str(acquisti[s]))
+       print("\n")
 
 main()
