@@ -1,38 +1,49 @@
-import sys
-
 FILENAME = "sales.txt"
 
-def valid_format(line):
+
+def controlloRiga(line):
   if len(line) != 4:
-    return "file format error: expected 4 fields in line, got "+str(len(line))
-  if type(line[0]) != str or type(line[1]) != str or type(line[2]) != float:
-    return "file format error: wrong type of fields in line"
+    #ritorna un messaggio di errore
+    return "Errore nella riga del file. Richiesti 4 campi"
+  if type(line[2]) != float:
+    return "Errore nella riga del file. Importo deve essere float"
+  
   return ""
 
 def main():
-  dict = {}
-  f = open(FILENAME, "r")
-  for line in f:
-    line_list = line.split(";")
-    line_list[2] = float(line_list[2])
-    err = valid_format(line_list)
-    if err != "":
-      print(err)
-      sys.exit(-1)
-    service = line_list[1] #key
-    cost = line_list[2]
-    if service in dict.keys():
-      dict[service] = dict[service] + cost
+  importiPerServizi = {}
+  errmsg = ""
+
+  try:
+    f = open(FILENAME, "r")
+  except:
+    print("Errore nell'apertura del file")
+
+  for lineStr in f:
+    line = lineStr.replace("\n", "").split(";")
+    #line[0] = nome
+    #line[1] = servizio
+    #line[2] = importo
+    #line[3] = data
+    # print(line)
+    line[2] = float(line[2])
+    errmsg = controlloRiga(line)
+    if errmsg != "":
+      print(errmsg)
+
+    servizio = line[1]
+    importo = line[2]
+
+    #distinguo caso in cui incontro chiave per la prima volta --> inizializzo valore
+    #non è la prima volta --> incremento valore
+    if servizio in importiPerServizi.keys():
+      #incremento
+      importiPerServizi[servizio] = importiPerServizi[servizio] + importo
     else:
-      dict[service] = cost
-
+      #inizializzo
+      importiPerServizi[servizio] = importo
+    
   f.close()
-  print("total amount for each service: ")
-  print(dict)
-
-    
-    
-
-main()
-    
+  print(importiPerServizi)
   
+main()
