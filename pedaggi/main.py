@@ -34,12 +34,18 @@ def leggiPercorsi():
     for lineStr in f:
         line = lineStr.strip().split(";")
         partenze.append(line[0])
-        arrivi.append(line[-1])
+        arrivi.append(line[1])
         
     f.close()
 
     return partenze, arrivi
 
+def trovaMinTariffa(importiPagati):
+    minTariffa = max(importiPagati)
+    for importo in importiPagati:
+        if importo > 0 and importo < minTariffa:
+            minTariffa = importo
+    return importiPagati.index(minTariffa)
 
 def main():
 
@@ -47,28 +53,32 @@ def main():
     partenze, arrivi = leggiPercorsi()
     importiPagati = [0]*len(arrivi) 
     #controllo preliminare: verifico che la partenza sia in ingressi e che l'arrivo sia in uscite
-    for partenza, arrivo in zip(partenze, arrivi):
-        #partenza e arrivo iterano parallelamente nelle due liste 
+    for indexPercorso in range(0, len(partenze)):
+        partenza = partenze[indexPercorso] #indice globale
+        arrivo = arrivi[indexPercorso]
         trovato = False #flag per vedere se il percorso esiste
-        count = 0 #contatore delle successioni di caselli
         if partenza in ingressi and arrivo in uscite:
             #potrebbe esistere un percorso
+            count = 0 #contatore delle successioni di caselli
             tempCaselloPartenza = partenza #variabile temporanea
-            while count < len(ingressi):
+            while count < len(pedaggi):
                 index = ingressi.index(tempCaselloPartenza)
-                tempCaselloArrivo = uscite[index]
+                tempCaselloArrivo = uscite[index] #indice locale per trovare i percorsi
                 count += 1
-                importiPagati[index] += pedaggi[index]
+                importiPagati[indexPercorso] += pedaggi[index]
                 if tempCaselloArrivo == arrivo:
                     trovato = True
                     break #esci dal while
                 else :
                     tempCaselloPartenza = tempCaselloArrivo 
             if trovato:
-                print("Percorso "+partenza+"-"+arrivo+": "+str(count)+" caselli, tariffa totale "+str(importiPagati[index]))
+                print("Percorso "+partenza+"-"+arrivo+": "+str(count)+" caselli, tariffa totale "+str(importiPagati[indexPercorso]))
         else:
             print("Percorso "+partenza+"-"+arrivo+": non raggiungibile")
-
+    
+    minIndex = trovaMinTariffa(importiPagati)
+    print("Percorso con minima tariffa")
+    print(partenze[minIndex]+"-"+arrivi[minIndex])
 
 
 main()
