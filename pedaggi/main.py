@@ -40,6 +40,32 @@ def leggiPercorsi():
 
     return partenze, arrivi
 
+def trovaSequenzePercorso(ingressi, uscite, pedaggi, partenze, arrivi, indexPercorso, importiPagati):
+    partenza = partenze[indexPercorso] #indice globale
+    arrivo = arrivi[indexPercorso]
+    trovato = False #flag per vedere se il percorso esiste
+    if partenza in ingressi and arrivo in uscite:
+        #potrebbe esistere un percorso
+        count = 0 #contatore delle successioni di caselli
+        tempCaselloPartenza = partenza #variabile temporanea
+        while count < len(pedaggi):
+            index = ingressi.index(tempCaselloPartenza)
+            tempCaselloArrivo = uscite[index] #indice locale per trovare i percorsi
+            count += 1
+            importiPagati[indexPercorso] += pedaggi[index]
+            if tempCaselloArrivo == arrivo:
+                trovato = True
+                break #esci dal while
+            else :
+                tempCaselloPartenza = tempCaselloArrivo
+
+        if trovato:
+            print("Percorso "+partenza+"-"+arrivo+": "+str(count)+" caselli, tariffa totale "+str(importiPagati[indexPercorso]))
+        else:
+            print("Percorso "+partenza+"-"+arrivo+": non raggiungibile")
+         
+    return trovato
+
 def trovaMinTariffa(importiPagati):
     minTariffa = max(importiPagati)
     for importo in importiPagati:
@@ -54,28 +80,8 @@ def main():
     importiPagati = [0]*len(arrivi) 
     #controllo preliminare: verifico che la partenza sia in ingressi e che l'arrivo sia in uscite
     for indexPercorso in range(0, len(partenze)):
-        partenza = partenze[indexPercorso] #indice globale
-        arrivo = arrivi[indexPercorso]
-        trovato = False #flag per vedere se il percorso esiste
-        if partenza in ingressi and arrivo in uscite:
-            #potrebbe esistere un percorso
-            count = 0 #contatore delle successioni di caselli
-            tempCaselloPartenza = partenza #variabile temporanea
-            while count < len(pedaggi):
-                index = ingressi.index(tempCaselloPartenza)
-                tempCaselloArrivo = uscite[index] #indice locale per trovare i percorsi
-                count += 1
-                importiPagati[indexPercorso] += pedaggi[index]
-                if tempCaselloArrivo == arrivo:
-                    trovato = True
-                    break #esci dal while
-                else :
-                    tempCaselloPartenza = tempCaselloArrivo 
-            if trovato:
-                print("Percorso "+partenza+"-"+arrivo+": "+str(count)+" caselli, tariffa totale "+str(importiPagati[indexPercorso]))
-        else:
-            print("Percorso "+partenza+"-"+arrivo+": non raggiungibile")
-    
+        trovaSequenzePercorso(ingressi, uscite, pedaggi, partenze, arrivi, indexPercorso, importiPagati)
+        
     minIndex = trovaMinTariffa(importiPagati)
     print("Percorso con minima tariffa")
     print(partenze[minIndex]+"-"+arrivi[minIndex])
