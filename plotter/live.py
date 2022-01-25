@@ -1,6 +1,17 @@
 NOME_FILE = "plotter.txt"
 N = 5
-riquadro = [["."]*N]*N #inizializzo matrice di puntini
+riquadro = [] #inizializzo matrice di puntini
+
+def inizializzaMatrice():
+    for i in range (N):
+        row = ["."]*N
+        riquadro.append(row)
+    
+def stampaMatrice():
+    for row in range(0, N):
+        for col in range(0, N):
+            print(riquadro[row][col], end=" ")
+        print("\n")
 
 def convertiRighe(row): #corretta
     return N-row-1
@@ -23,10 +34,7 @@ def disegnaRigaVerticale(xIn, yIn, l):
             riquadro[i][yIn] = "|"
 
 def main():
-    for row in range(0, N):
-        for col in range(0, N):
-            print(riquadro[row][col], end=" ")
-        print("\n")
+    inizializzaMatrice()
     try:
         f = open(NOME_FILE, "r")
     except IOError:
@@ -34,8 +42,10 @@ def main():
 
     for lineStr in f:
         line = lineStr.strip().split(" ")
+        #print(line[1]+" "+line[2]+"--->", end=" ")
         x = convertiRighe(int(line[1])) #riga
         y = int(line[2])
+        #print(str(x)+" "+str(y))
         if line[0] == "P":
             disegnaPunto(x, y)
         elif line[0] == "H":
@@ -46,5 +56,6 @@ def main():
             disegnaRigaVerticale(x, y, l)
         
     f.close()
+    stampaMatrice()
 
 main()
