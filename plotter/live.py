@@ -1,61 +1,66 @@
-NOME_FILE = "plotter.txt"
 N = 5
-riquadro = [] #inizializzo matrice di puntini
+riquadro = [] #matrice inizializzata a lista vuota
 
 def inizializzaMatrice():
-    for i in range (N):
-        row = ["."]*N
-        riquadro.append(row)
-    
+    for i in range(N):
+        riga = ["."]*N
+        riquadro.append(riga)
+
 def stampaMatrice():
-    for row in range(0, N):
-        for col in range(0, N):
-            print(riquadro[row][col], end=" ")
+    for i in range(N):
+        for j in range(N):
+            print(riquadro[i][j], end=" ")
         print("\n")
 
-def convertiRighe(row): #corretta
-    return N-row-1
+def convertiRiga(riga):
+    return N - riga - 1
 
-def disegnaPunto(x, y):
-    riquadro[x][y] = "*"
+def disegnaPunto(row, col):
+    riquadro[row][col] = "*"
 
-def disegnaRigaOrizzontale(xIn, yIn, l):
-    for j in range(yIn, yIn+l-1):
-        if riquadro[xIn][j] == "|":
-            riquadro[xIn][j] = "+"
+def disegnaRigaOrizzontale(row, col, length):
+    for j in range(col, col+length -1):
+        if riquadro[row][j] == "|":
+            riquadro[row][j] = "+"
         else:
-            riquadro[xIn][j] = "-"
+            riquadro[row][j] = "-"
 
-def disegnaRigaVerticale(xIn, yIn, l):
-    for i in range(xIn, xIn-l-1, -1):
-        if riquadro[i][yIn] == "-":
-            riquadro[i][yIn] = "+"
+def disegnaRigaVerticale(row, col, length):
+    #for che decrementa l'indice delle righe
+    for i in range(row, row-length-1, -1):
+        if riquadro[i][col] == "-":
+            riquadro[i][col] = "+"
         else:
-            riquadro[i][yIn] = "|"
+            riquadro[i][col] = "|"
 
 def main():
     inizializzaMatrice()
+    stampaMatrice()
     try:
-        f = open(NOME_FILE, "r")
+        f = open("plotter.txt", "r")
     except IOError:
         exit("Errore nell'apertura del file")
+    
+    for record in f:
+        campi = record.strip().split(" ")
+        i = convertiRiga(int(campi[1]))
+        j = int(campi[2])
 
-    for lineStr in f:
-        line = lineStr.strip().split(" ")
-        #print(line[1]+" "+line[2]+"--->", end=" ")
-        x = convertiRighe(int(line[1])) #riga
-        y = int(line[2])
-        #print(str(x)+" "+str(y))
-        if line[0] == "P":
-            disegnaPunto(x, y)
-        elif line[0] == "H":
-            l = int(line[3])
-            disegnaRigaOrizzontale(x, y, l)
-        elif line[0] == "V":
-            l = int(line[3])
-            disegnaRigaVerticale(x, y, l)
-        
+        if campi[0] == "P":
+            disegnaPunto(i, j)
+        if campi[0] == "H":
+            l = int(campi[3])
+            disegnaRigaOrizzontale(i, j, l)
+        if campi[0] == "V":
+            l = int(campi[3])
+            disegnaRigaVerticale(i, j, l)
     f.close()
+
     stampaMatrice()
 
+
+
+
+
 main()
+
