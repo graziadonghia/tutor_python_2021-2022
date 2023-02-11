@@ -12,10 +12,10 @@ def saveCharacters(filename):
 
     f = open(filename, "r")
     for lineStr in f:
-        line = lineStr.replace("\r\n", "").split(";")
+        line = lineStr.replace("\n", "").split(";")
         if line[0] == "Nome":
             #header
-            properties = list(line)
+            properties = line #lista di chiavi
         else:
             newCharacter = dict({k:v for k,v in zip(properties, line)})
             characters.append(newCharacter)
